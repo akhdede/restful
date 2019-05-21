@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+            <div id="category">
+              <li v-for="blog_post_category in blog_post_categories" style="list-style-type: none">
+                <div class="form-check">
+                  <label class="form-check-label" for="defaultCheck1">
+                    {{blog_post_category.title}}
+                  </label>
+                </div>
+              </li>
+              <div class="form-inline ml-0 mt-3">
+                <div class="form-group mx-sm-1 mb-2">
+                  <input type="text" v-model="blog_post_category" class="form-control form-control-sm" placeholder="Tambah category">
+                </div>
+                <input type="button" v-on:click="addBlogPostCategory" class="btn btn-primary mb-2 btn-sm" value="Tambah">
+              </div>
+            </div>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+new Vue({
+  el: '#category',
+  data: {
+    blog_post_categories: [],
+    blog_post_category: ''
+  },
+        methods: {
+                addBlogPostCategory(){
+                        axios.post('http://dedeirwanto.id:8080/blog_post_categories', {
+                                blog_post_category: {
+                                        title: this.blog_post_category
+                                }
+                        }).then(response => {
+                                this.blog_post_categories.push(response.data)
+                                this.blog_post_category = '' 
+                        })
+                }
+  },
+  created(){
+    axios.get('http://dedeirwanto.id:8080/blog_post_categories').then((response) => {
+      console.log(response)
+      this.blog_post_categories = response.data
+    })
+  }
+})
+
+  </script>
+</body>
+</html>
